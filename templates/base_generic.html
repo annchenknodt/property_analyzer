@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  
+  {% block title %}<title>Analyzer</title>{% endblock %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    google.load("visualization", "1", {packages:["corechart"]});
+</script>
+  
+  <!-- Add additional CSS in static file -->
+  {% load static %}
+  <link rel="stylesheet" href="{% static '/css/wtf7.css' %}">
+</head>
+
+<nav class="navbar navbar-light navbar-custom" style="background-color: #e3f2fd;"">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/property_analyzer">Property Analyzer</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="/property_analyzer">Home</a></li>
+      <li><a href="/property_analyzer/rental/">Rental Property</a></li>
+    </ul>  
+    <ul class="nav navbar-nav navbar-right">  
+      <li><a href="/property_analyzer/logout">Logout</a></li>
+    </ul>
+  </div>
+</nav>
+
+<body>
+
+<script>
+
+    $(document).ready(function() {        
+        // django
+        $('a[href="' + this.location.pathname + '"]').parent().addClass('active');
+    });
+
+</script>
+
+<div class="inner-body">
+
+      {% block content %}{% endblock %}
+
+</div>
+
+</body>
+</html>

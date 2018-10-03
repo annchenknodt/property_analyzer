@@ -1,0 +1,142 @@
+{% extends "base_generic.html" %}
+{% load humanize %}
+{% load index %}
+{% block content %}
+
+<h2><center>Rental Property Analysis</center></h2>
+<h3>{{vals.title}}</h3>
+<hr>
+<div class="container-fluid col-xs-4">
+<table class="table-summary2">
+	<tr><td><font size=5>${{vals.price|floatformat:"0"|intcomma}}</font></td></tr>
+	<tr><td class="summary2-text">PURCHASE PRICE</td></tr>
+	<tr><td> </td></tr>
+	<tr><td> </td></tr>
+	<tr><td class="summary2-text">Purchase Closing Costs</td><td class="text-right">${{vals.closing_cost|floatformat:"2"|intcomma}}</td></tr>
+	<tr><td class="summary2-text">Estimated Repairs</td><td class="text-right">${{vals.repair_cost|floatformat:"2"|intcomma}}</td></tr>
+	<tr><td class="summary2-text">Total Project Cost</td><td class="text-right">${{vals.total_cost|floatformat:"2"|intcomma}}</td></tr>
+	<tr><td class="summary2-text">After Repair Value</td><td class="text-right">${{vals.arv|floatformat:"2"|intcomma}}</td></tr>
+	<tr><td> </td></tr>
+	<tr><td> </td></tr>
+	<tr><td class="summary2-text">Down Payment</td><td class="text-right">${{vals.down|floatformat:"2"|intcomma}}</td></tr>
+	<tr><td class="summary2-text">Loan Amount</td><td class="text-right">${{vals.loan_amt|floatformat:"2"|intcomma}}</td></tr>
+	<tr><td class="summary2-text">Loan Points</td><td class="text-right">${{vals.loan_points|floatformat:"2"|intcomma}}</td></tr>
+	<tr><td class="summary2-text">Amortized Over</td><td class="text-right">{{vals.amt_years}} years</td></tr>
+	<tr><td class="summary2-text">Loan Interest Rate</td><td class="text-right">{{vals.loan_rate|floatformat:"2"}}%</td></tr>
+	<tr><td class="summary2-text">Monthly P&I</td><td class="text-right">${{vals.monthly_PI|floatformat:"2"|intcomma}}</td></tr>
+	<tr><td class="summary2-text">Total Cash Needed</td><td class="text-right">${{vals.total_cash|floatformat:"2"|intcomma}}</td></tr>
+</table>
+</div>
+
+<div class="container-fluid col-xs-8">
+<table class="table-summary1">
+	
+	<tr class=summary1-num>
+	<td>${{vals.monthly_in|floatformat:"2"|intcomma}}</td>
+	<td>${{vals.monthly_ex|floatformat:"2"|intcomma}}</td>
+	<td>${{vals.monthly_cf|floatformat:"2"|intcomma}}</td>
+	<td>{{vals.pro_forma_cap|floatformat:"2"}}%</td>
+	</tr>
+	<tr class="summary1-text"><td>MONTHLY INCOME</td><td>MONTHLY EXPENSES</td><td>MONTHLY CASHFLOW</td><td>PRO FORMA CAP</td></tr>
+
+	<tr class=summary1-num><td>${{vals.NOI|floatformat:"2"|intcomma}}</td>
+		<td>${{vals.total_cash|floatformat:"2"|intcomma}}</td>
+		<td>{{vals.CoC_roi|floatformat:"2"}}%</td>
+		<td>{{vals.purchase_cap|floatformat:"2"}}%</td>
+	</tr>
+	<tr  class="summary1-text"><td>NOI</td><td>TOTAL CASH NEEDED</td><td>CASH ON CASH ROI</td><td>PURCHASE CAP RATE</td></tr>
+	
+</table>
+</div>
+
+<div class="container-fluid col-xs-8">
+{{ piechart.as_html }}	
+</div>
+
+<div class="container-fluid">
+<table class="table table-striped">
+	<thead class="thead-inverse">
+		<th></th>
+		{% for i in vals.show_years %}
+			<th class="text-right">Year {{i}}</th>
+		{% endfor %}	
+	</thead>
+
+	<tr>
+		<td>Total Annual Income</td>
+		{% for i in vals.show_years_index %}
+			<td class="text-right">${{vals.yearly_in|index:i|floatformat:"2"|intcomma}}</td>
+		{% endfor %}
+	</tr>	
+	<tr>
+		<td>Total Annual Expenses</td>
+		{% for i in vals.show_years_index %}
+			<td class="text-right">${{vals.yearly_ex|index:i|floatformat:"2"|intcomma}}</td>
+		{% endfor %}
+	</tr>	
+	<tr>
+		<td>&nbsp&nbsp&nbspOperating Expenses</td>
+		{% for i in vals.show_years_index %}
+			<td class="text-right">${{vals.yearly_op|index:i|floatformat:"2"|intcomma}}</td>
+		{% endfor %}
+	</tr>	
+	<tr>
+		<td>&nbsp&nbsp&nbspMortgage Payment</td>
+		{% for i in vals.show_years_index %}
+			<td class="text-right">${{vals.yearly_mg|index:i|floatformat:"2"|intcomma}}</td>
+		{% endfor %}
+	</tr>	
+	<tr>
+		<td>Total Annual Cashflow</td>
+		{% for i in vals.show_years_index %}
+			<td class="text-right">${{vals.yearly_cf|index:i|floatformat:"2"|intcomma}}</td>
+		{% endfor %}
+	</tr>	
+	<tr>
+		<td>Cash on Cash ROI</td>
+		{% for i in vals.show_years_index %}
+			<td class="text-right">{{vals.yearly_cc|index:i|floatformat:"2"}}%</td>
+		{% endfor %}
+	</tr>	
+	<tr>
+		<td>Property Value</td>
+		{% for i in vals.show_years_index %}
+			<td class="text-right">${{vals.yearly_pv|index:i|floatformat:"2"|intcomma}}</td>
+		{% endfor %}
+	</tr>	
+	<tr>
+		<td>Equity</td>
+		{% for i in vals.show_years_index %}
+			<td class="text-right">${{vals.yearly_eq|index:i|floatformat:"2"|intcomma}}</td>
+		{% endfor %}
+	</tr>	
+	<tr>
+		<td>Loan Balance</td>
+		{% for i in vals.show_years_index %}
+			<td class="text-right">${{vals.yearly_ba|index:i|floatformat:"2"|intcomma}}</td>
+		{% endfor %}	
+	</tr>	
+	<tr>
+		<td>Total Profit if Sold</td>
+		{% for i in vals.show_years_index %}
+			<td class="text-right">${{vals.yearly_pr|index:i|floatformat:"2"|intcomma}}</td>
+		{% endfor %}
+	</tr>	
+	<tr>
+		<td>Annualized Total Return</td>
+		{% for i in vals.show_years_index %}
+			<td class="text-right">{{vals.yearly_ar|index:i|floatformat:"2"}}%</td>
+		{% endfor %}							
+	</tr>
+</table>
+</div>
+
+<div class="container-fluid col-xs-6">
+{{ linechart.as_html }}	
+</div>
+
+<div class="container-fluid col-xs-6">
+{{ areachart.as_html }}	
+</div>
+
+{% endblock %}

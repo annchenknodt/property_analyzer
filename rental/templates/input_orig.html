@@ -1,0 +1,43 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h2>Enter details</h2>
+
+	{% crispy form_desc %}
+<!-- <form action="" method="post">
+    {% csrf_token %}
+
+    <div class="input_form" style="width:300px; float:left; padding-right:100px">
+    	{{ form_desc|bootstrap }}
+    </div>
+
+    <div class="input_form" style="width:125px; float:left; padding-right:25px">
+    	{{ form_fin|bootstrap }}
+    </div>
+
+    <div class="input_form" style="width:125px; float:left; padding-right:25px">
+    	{{ form_inc|bootstrap }}
+    </div>
+
+    <div class="input_form" style="width:125px; float:left; padding-right:25px">
+    	{{ form_fix_ex|bootstrap }}
+    </div>
+
+    <div class="input_form" style="width:125px; float:left; padding-right:25px">
+    	{{ form_var_ex|bootstrap }}
+    </div>
+
+    <div class="input_form" style="width:125px; float:left; padding-right:25px">
+    	{{ form_future|bootstrap }}
+    </div>
+
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+
+
+    <input type="submit" name="action" value="Calculate Results" /> 
+
+</form> -->
+
+
+{% endblock %}
