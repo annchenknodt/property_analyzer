@@ -3,7 +3,7 @@
 __pycache__
 djangodev
 db.sqlite3
-.DS_Store
+*.DS_Store
 property_analyzer/settings_secret.py
 migrations/
 .htaccess
