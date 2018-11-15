@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h2><center>Rental Property Analysis</center></h2>
+<br /><br />
+
+<a href="0/edit"><button class="btn btn-primary">Create new analysis</button></a>
+<br /><br />
+<h3>Existing analyses</h3>
+<table class="table">
+{% for a in analysis_list %}
+	<tr>
+	<td>{{a.name}}</td>
+	<td>{{a.created_at}}</td>
+	<td><a href="{{a.id}}/results">View Results</a></td>
+	<td><a href="{{a.id}}/edit">Edit</a></td>
+	</tr>
+{% endfor %}
+</table>
+
+{% endblock %}
