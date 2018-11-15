@@ -1,0 +1,13 @@
+*.pyc
+*~
+__pycache__
+djangodev
+db.sqlite3
+.DS_Store
+property_analyzer/settings_secret.py
+migrations/
+.htaccess
+property_analyzer.fcgi
+property_analyzer.json
+property_analyzer_full.json
+
