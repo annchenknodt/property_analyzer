@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import loader, Context
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 from graphos.sources.simple import SimpleDataSource
 from graphos.renderers.gchart import PieChart, LineChart, AreaChart
 from decimal import *
@@ -13,7 +14,18 @@ from .models import Analysis
 from .forms import InputForm #_description, InputForm_finance, InputForm_income, InputForm_fixed_ex, InputForm_variable_ex, InputForm_future
 
 @login_required(login_url="/property_analyzer/login/")
-def input(request):
+def saved(request):
+	return render(request, 'input.html',{'form':form})
+
+@login_required(login_url="/property_analyzer/login/")
+def index(request):
+    analysis_list = Analysis.objects.order_by('name')
+    # output = ', '.join([a.name for a in analysis_list])
+    return render(request, 'list.html',{'analysis_list':analysis_list})
+
+@login_required(login_url="/property_analyzer/login/")
+def edit(request,analysis_id):
+
 	if request.method == 'POST':
 		form = InputForm(request.POST)
 		# form_fin = InputForm_finance(request.POST)
@@ -23,8 +35,46 @@ def input(request):
 		# form_future = InputForm_future(request.POST)
 		if form.is_valid():
 
-			# check for 0 values e.g. in amt_years!!
 			data=form.cleaned_data
+
+			## save to database
+			if analysis_id == 0:
+				new_analysis=Analysis.objects.create(**data)
+				new_analysis.save()
+				analysis_id=new_analysis.pk
+			else:
+				Analysis.objects.filter(id=analysis_id).update(**data)
+
+			return HttpResponseRedirect(reverse('rental:results', args=(analysis_id,)))
+
+		else:
+			print("NAY")
+			val=0
+
+	else:
+		if analysis_id == 0:
+			form = InputForm()
+		else:
+			form = InputForm(Analysis.objects.filter(id=analysis_id).values()[0])
+		# form_fin = InputForm_finance()
+		# form_inc = InputForm_income()
+		# form_fix_ex = InputForm_fixed_ex()
+		# form_var_ex = InputForm_variable_ex()
+		# form_future = InputForm_future()
+
+	return render(request, 'input.html',{'form':form})
+	# return render(request, 'input.html',{'form_desc':form_desc,'form_fin':form_fin,'form_inc':form_inc,'form_fix_ex':form_fix_ex,'form_var_ex':form_var_ex,'form_future':form_future})
+
+
+
+@login_required(login_url="/property_analyzer/login/")
+def results(request,analysis_id):
+			#form = InputForm(request.POST)
+
+			# check for 0 values e.g. in amt_years!!
+			#data=form.cleaned_data
+			data=Analysis.objects.filter(id=analysis_id).values()[0]
+
 			total_cost=data['price']+data['repair_cost']+data['closing_cost']
 			down=int(data['price']*data['down_payment']/100)
 			loan_amt=data['price']-down
@@ -45,6 +95,20 @@ def input(request):
 			initial_equity=data['arv']-data['price']-data['repair_cost']+down
 			GRM=data['price']/(monthly_in*12)
 			DCR=NOI/(12*monthly_PI)
+
+			# calculate cash flow by purchase price
+			price_bot=50000
+			price_top=150000
+			price_inc=500
+			cf_by_price=[['Offer','Cash Flow']]
+			CoC_by_price=[['Offer','Cash on Cash Return']]
+			for cur_price in range(price_bot,price_top+1,price_inc):
+				cur_down=int(cur_price*data['down_payment']/100)
+				cur_loan_amt=cur_price-cur_down
+				cur_PI=float((cur_loan_amt*R)/(1-(1+R)**(-12*data['amt_years'])))				
+				cur_ex=monthly_ex-monthly_PI+cur_PI # everything else is fixed so just adjust PI #### currently not accounting for PMI!
+				cf_by_price.append([cur_price,monthly_in-cur_ex])
+				CoC_by_price.append([cur_price,(monthly_in-cur_ex)*12/total_cash])
 
 			# initialize yearly values with first year and rest 0s
 			yearly_in=[monthly_in*12]+[0]*(data['amt_years']-1)
@@ -141,35 +205,26 @@ def input(request):
 					piechart_list.append([ex_display_names[ex],data[ex]/100*monthly_in])
 			if(monthly_PI>0):		
 				piechart_list.append(['Mortgage',monthly_PI])		
-			piechart = PieChart(SimpleDataSource(data=piechart_list),options={'title':'Expenses'})
+			piechart = PieChart(SimpleDataSource(data=piechart_list),options={'title':'Expenses','titleTextStyle':{'fontSize':16}})
 
 			## line chart
 			linechart_list=[['Year','Income','Expenses','Cash Flow']]
 			for i in range(0,data['amt_years']):
 				linechart_list.append([i+1,yearly_in[i],yearly_ex[i],yearly_cf[i]])
-			# linechart = LineChart(SimpleDataSource(data=linechart_list),options={'title':'Income, Expenses, and Cash Flow','vAxis':{format:'currency'}})	
-			linechart = LineChart(SimpleDataSource(data=linechart_list),options={'title':'Income, Expenses, and Cash Flow'})	
+			linechart = LineChart(SimpleDataSource(data=linechart_list),html_id='linechart_div',width=600,options={'title':'Income, Expenses, and Cash Flow','vAxis':{'format':'$###,###'},'hAxis': {'title': 'Years' },'titleTextStyle':{'fontSize':16}})	
+
 
 			## area chart
 			areachart_list=[['Year','Loan Balance','Equity','Property Value']]
 			for i in range(0,data['amt_years']):
 				areachart_list.append([i+1,yearly_ba[i],yearly_eq[i],yearly_pr[i]])
-			areachart = AreaChart(SimpleDataSource(data=areachart_list),options={'title':'Loan Balance, Value, and Equity'})	
+			areachart = AreaChart(SimpleDataSource(data=areachart_list),html_id='areachart_div',width=600,options={'title':'Loan Balance, Value, and Equity','vAxis':{'format':'$###,###'},'hAxis': {'title': 'Years' },'titleTextStyle':{'fontSize':16}})	
 
-		else:
-			print("NAY")
-			val=0
+			## cash flow by offer chart	
+			cfchart = LineChart(SimpleDataSource(data=cf_by_price),html_id='cfchart_div',width=600,options={'title':'Monthly Cashflow by Offer Amount','vAxis':{'title':'Cashflow','format':'$###,###'},'hAxis': {'title': 'Offer Amount','format':'$###,###'}, 'legend':{'position':'none'},'titleTextStyle':{'fontSize':16} })				
+			cocchart = LineChart(SimpleDataSource(data=CoC_by_price),html_id='cocchart_div',width=600,options={'title':'Cash on Cash Return by Offer Amount','vAxis':{'title':'Cash on Cash Return','format':'percent'},'hAxis': {'title': 'Offer Amount','format':'$###,###'}, 'legend':{'position':'none'} ,'titleTextStyle':{'fontSize':16}})				
+
+			# return render(request, 'selected_data.html',{'fields':fields,'fields_day1':fields_day1,'fields_bat':fields_bat,'fields_img':fields_img,'fields_snp':fields_snp,'subj_data_tuples':subj_data_tuples})
+			return render(request, 'output.html',{'vals':vals,'piechart':piechart,'linechart':linechart,'areachart':areachart,'cfchart':cfchart,'cocchart':cocchart})
 
 
-		# return render(request, 'selected_data.html',{'fields':fields,'fields_day1':fields_day1,'fields_bat':fields_bat,'fields_img':fields_img,'fields_snp':fields_snp,'subj_data_tuples':subj_data_tuples})
-		return render(request, 'output.html',{'vals':vals,'piechart':piechart,'linechart':linechart,'areachart':areachart})
-	else:
-		form = InputForm()
-		# form_fin = InputForm_finance()
-		# form_inc = InputForm_income()
-		# form_fix_ex = InputForm_fixed_ex()
-		# form_var_ex = InputForm_variable_ex()
-		# form_future = InputForm_future()
-
-	return render(request, 'input.html',{'form':form})
-	# return render(request, 'input.html',{'form_desc':form_desc,'form_fin':form_fin,'form_inc':form_inc,'form_fix_ex':form_fix_ex,'form_var_ex':form_var_ex,'form_future':form_future})

@@ -24,7 +24,7 @@ class InputForm(forms.ModelForm):
 			"loan_rate":"Loan rate (%)",
 			"amt_years":"Amortized over how many years?",
 			"typical_cap":"Typical cap rate",
-			"water_swere":"Water &amp; Sewer",
+			"water_sewer":"Water/Sewer",
 			"pmi":"PMI",
 			"hoa":"HOAs",
 			"ex_other":"Other",
@@ -120,7 +120,7 @@ class InputForm(forms.ModelForm):
 			    )
 		    ),
             bootstrap.FormActions(
-				layout.Submit('submit', _('Calculate')),
+				layout.Submit('submit', _('Save and calculate')),
             )
         )
 

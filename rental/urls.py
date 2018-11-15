@@ -7,9 +7,11 @@ app_name = 'rental'
 
 urlpatterns = [
     # ex: /getdata/
-    #path('', views.home, name='index'),
+    path('', views.index, name='index'),
     # ex: /getdata/select/
-    path('', views.input, name='input'),
-  
+       # ex: /polls/5/results/
+    # path('<int:question_id>/results/', views.results, name='results'),
+    path('<int:analysis_id>/results/', views.results, name='results'),
+  	path('<int:analysis_id>/edit/', views.edit, name='edit'),
     
 ]

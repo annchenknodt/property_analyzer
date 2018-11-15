@@ -54,7 +54,7 @@
 </div>
 
 <div class="container-fluid">
-<table class="table table-striped">
+<table class="table">
 	<thead class="thead-inverse">
 		<th></th>
 		{% for i in vals.show_years %}
@@ -62,25 +62,25 @@
 		{% endfor %}	
 	</thead>
 
-	<tr>
+	<tr >
 		<td>Total Annual Income</td>
 		{% for i in vals.show_years_index %}
 			<td class="text-right">${{vals.yearly_in|index:i|floatformat:"2"|intcomma}}</td>
 		{% endfor %}
 	</tr>	
-	<tr>
+	<tr bgcolor="#F3F3F3">
 		<td>Total Annual Expenses</td>
 		{% for i in vals.show_years_index %}
 			<td class="text-right">${{vals.yearly_ex|index:i|floatformat:"2"|intcomma}}</td>
 		{% endfor %}
 	</tr>	
-	<tr>
+	<tr bgcolor="#F3F3F3">
 		<td>&nbsp&nbsp&nbspOperating Expenses</td>
 		{% for i in vals.show_years_index %}
 			<td class="text-right">${{vals.yearly_op|index:i|floatformat:"2"|intcomma}}</td>
 		{% endfor %}
 	</tr>	
-	<tr>
+	<tr bgcolor="#F3F3F3">
 		<td>&nbsp&nbsp&nbspMortgage Payment</td>
 		{% for i in vals.show_years_index %}
 			<td class="text-right">${{vals.yearly_mg|index:i|floatformat:"2"|intcomma}}</td>
@@ -92,7 +92,7 @@
 			<td class="text-right">${{vals.yearly_cf|index:i|floatformat:"2"|intcomma}}</td>
 		{% endfor %}
 	</tr>	
-	<tr>
+	<tr bgcolor="#F3F3F3">
 		<td>Cash on Cash ROI</td>
 		{% for i in vals.show_years_index %}
 			<td class="text-right">{{vals.yearly_cc|index:i|floatformat:"2"}}%</td>
@@ -104,7 +104,7 @@
 			<td class="text-right">${{vals.yearly_pv|index:i|floatformat:"2"|intcomma}}</td>
 		{% endfor %}
 	</tr>	
-	<tr>
+	<tr bgcolor="#F3F3F3">
 		<td>Equity</td>
 		{% for i in vals.show_years_index %}
 			<td class="text-right">${{vals.yearly_eq|index:i|floatformat:"2"|intcomma}}</td>
@@ -116,7 +116,7 @@
 			<td class="text-right">${{vals.yearly_ba|index:i|floatformat:"2"|intcomma}}</td>
 		{% endfor %}	
 	</tr>	
-	<tr>
+	<tr bgcolor="#F3F3F3">
 		<td>Total Profit if Sold</td>
 		{% for i in vals.show_years_index %}
 			<td class="text-right">${{vals.yearly_pr|index:i|floatformat:"2"|intcomma}}</td>
@@ -131,12 +131,22 @@
 </table>
 </div>
 
-<div class="container-fluid col-xs-6">
+<!-- <div class="container-fluid col-xs-6"> -->
+
+<div class="bottomchart">
 {{ linechart.as_html }}	
 </div>
 
-<div class="container-fluid col-xs-6">
+<div class="bottomchart">
 {{ areachart.as_html }}	
+</div>
+
+<div class="bottomchart">
+{{ cfchart.as_html }}	
+</div>
+
+<div class="bottomchart">
+{{ cocchart.as_html }}	
 </div>
 
 {% endblock %}

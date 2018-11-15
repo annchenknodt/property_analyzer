@@ -16,7 +16,7 @@
   
   <!-- Add additional CSS in static file -->
   {% load static %}
-  <link rel="stylesheet" href="{% static '/css/wtf7.css' %}">
+  <link rel="stylesheet" href="{% static '/css/rental.css' %}">
 </head>
 
 <nav class="navbar navbar-light navbar-custom" style="background-color: #e3f2fd;"">
@@ -41,6 +41,11 @@
     $(document).ready(function() {        
         // django
         $('a[href="' + this.location.pathname + '"]').parent().addClass('active');
+        // assign chart elements to bootstrap class; not sure what effect this has
+        $("#linechart_div").addClass("col-xs-6");
+        $("#areachart_div").addClass("col-xs-6");
+        $("#cfchart_div").addClass("col-xs-6");
+        $("#cocchart_div").addClass("col-xs-6");
     });
 
 </script>

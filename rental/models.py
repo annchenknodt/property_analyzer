@@ -2,8 +2,9 @@ from django.db import models
 from decimal import Decimal
 
 class Analysis(models.Model):
+	created_at = models.DateTimeField(auto_now_add=True)
 	# description
-	name=models.CharField(max_length=100,unique=True)	
+	name=models.CharField(max_length=100)	
 	address_st=models.CharField(max_length=50,default='')
 	address_city=models.CharField(max_length=50,default='')
 	address_state=models.CharField(max_length=20,default='')
@@ -43,4 +44,7 @@ class Analysis(models.Model):
 	annual_propvalue_growth=models.IntegerField(default=2)
 	annual_ex_growth=models.IntegerField(default=2)
 	sales_ex=models.IntegerField(default=10)
+
+	def __str__(self):
+		return str(self.id)+"_"+self.name 	
 
