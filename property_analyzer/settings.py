@@ -15,7 +15,7 @@ from .settings_secret import * # for sensitive information
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -28,7 +28,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEBUG = True
 
 ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['127.0.0.1','10.191.27.255','www.haririlab.com']
+ALLOWED_HOSTS = ['127.0.0.1','10.191.27.255','www.haririlab.com','www.oakhillpropertiestx.com']
 
 
 # Application definition
@@ -64,24 +64,8 @@ MIDDLEWARE = [
 # this is in settings_secret.py
 # ROOT_URLCONF = 'property_analyzer.urls'
 
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            'rental/templates',
-            'templates',
-        ],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-            ],
-        },
-    },
-]
+# TEMPLATES = [
+# ]
 
 WSGI_APPLICATION = 'property_analyzer.wsgi.application'
 
@@ -142,11 +126,11 @@ CRISPY_TEMPLATE_PACK = "bootstrap3"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 # https://stackoverflow.com/questions/36760549/python-django-youre-using-the-staticfiles-app-without-having-set-the-static-ro
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'rental'),
-]
+# PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+# STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'rental'),
+# ]
 
 # this is in settings_secret
 #STATIC_URL = 'https://www.haririlab.com/longdb_dns/getdata/static/'  ### need this for deploy; for now only have static files in getdata app but may want to change later
