@@ -28,7 +28,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEBUG = True
 
 ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['127.0.0.1','10.191.27.255','www.haririlab.com']
+ALLOWED_HOSTS = ['127.0.0.1','10.191.27.255','www.oakhillpropertiestx.com','www.haririlab.com']
 
 
 # Application definition

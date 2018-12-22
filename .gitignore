@@ -1,3 +1,5 @@
+tmp
+passenger*
 *.pyc
 *~
 __pycache__
