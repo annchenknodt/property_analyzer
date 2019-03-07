@@ -217,7 +217,7 @@ def results(request,analysis_id):
 			## area chart
 			areachart_list=[['Year','Loan Balance','Equity','Property Value']]
 			for i in range(0,data['amt_years']):
-				areachart_list.append([i+1,yearly_ba[i],yearly_eq[i],yearly_pr[i]])
+				areachart_list.append([i+1,yearly_ba[i],yearly_eq[i],yearly_pv[i]])
 			areachart = AreaChart(SimpleDataSource(data=areachart_list),html_id='areachart_div',width=600,options={'title':'Loan Balance, Value, and Equity','vAxis':{'format':'$###,###'},'hAxis': {'title': 'Years' },'titleTextStyle':{'fontSize':16}})	
 
 			## cash flow by offer chart	
